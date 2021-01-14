@@ -1,0 +1,13 @@
+@import "~react-select/scss/default";
+
+.ss-relpicker-field .Select--multi .Select-value {
+  margin-top: 3px;
+}
+
+.ss-relpicker-field .inputs-container{
+  display: flex;
+}
+
+.ss-relpicker-field .Select--single {
+  flex: 1;
+}

@@ -1,0 +1,5 @@
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'gurucomkz/rel-picker:client/dist/styles/bundle.css'
+  extra_requirements_javascript:
+    - 'gurucomkz/rel-picker:client/dist/js/bundle.js'
