@@ -230,14 +230,18 @@ class RelPickerField extends SingleSelectField
      */
     public function getCreateNewURL()
     {
-        if($this->createNewURL) {
+        if ($this->createNewURL) {
             return $this->createNewURL;
         }
         $source = $this->getSourceList();
-        if(!$source) return null;
+        if (!$source) {
+            return null;
+        }
 
         $dataClass = $source->dataClass();
-        if(!method_exists($dataClass,'getCMSEditLink')) return null;
+        if (!method_exists($dataClass, 'getCMSEditLink')) {
+            return null;
+        }
 
         $singleton = singleton($dataClass);
         return $singleton->getCMSEditLink();
@@ -400,21 +404,21 @@ class RelPickerField extends SingleSelectField
         $query = $source->dataQuery()
             ->query()
             ->addWhere([
-                'CONCAT_WS(\' \',"'.implode('","',$fields).'") LIKE ?' => '%'.str_replace(' ','%',trim($term)).'%'
+                'CONCAT_WS(\' \',"'.implode('","', $fields).'") LIKE ?' => '%'.str_replace(' ', '%', trim($term)).'%'
             ])
-            ->addOrderBy('ID','DESC')
+            ->addOrderBy('ID', 'DESC')
             ->setLimit($this->getLazyLoadItemLimit())
             ->execute();
 
         // Map into a distinct list
-        $mkTitle = function($entry)use($fields){
+        $mkTitle = function ($entry) use ($fields) {
             $r = [];
-            foreach($fields as $f){
-                if($v = trim($entry[$f])){
+            foreach ($fields as $f) {
+                if ($v = trim($entry[$f])) {
                     $r[] = $v;
                 }
             }
-            return implode(', ',$r);
+            return implode(', ', $r);
         };
 
         $items = [];
@@ -475,10 +479,10 @@ class RelPickerField extends SingleSelectField
 
         $source = $this->getSourceList();
         $value = $this->Value();
-        if($source && $value) {
+        if ($source && $value) {
             $valueobject = $source->filter('ID', $value)->first();
-            if($valueobject){
-                return new PrettyLiteralField($this->getName(),$this->title, $valueobject->Title);
+            if ($valueobject) {
+                return new PrettyLiteralField($this->getName(), $this->title, $valueobject->Title);
             }
         }
 
