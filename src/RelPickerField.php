@@ -47,6 +47,8 @@ class RelPickerField extends SingleSelectField
 
     protected $lookupFields = [];
 
+    protected $allowCreate = true;
+
     /**
      * @var string
      */
@@ -116,6 +118,26 @@ class RelPickerField extends SingleSelectField
     public function setTitleField($titleField)
     {
         $this->titleField = $titleField;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAllowCreate()
+    {
+        return $this->allowCreate;
+    }
+
+    /**
+     * @param boolean $val
+     *
+     * @return $this
+     */
+    public function setAllowCreate($val)
+    {
+        $this->allowCreate = !!$val;
 
         return $this;
     }
@@ -230,6 +252,10 @@ class RelPickerField extends SingleSelectField
      */
     public function getCreateNewURL()
     {
+        if (!$this->allowCreate) {
+            return null;
+        }
+
         if ($this->createNewURL) {
             return $this->createNewURL;
         }
@@ -243,7 +269,11 @@ class RelPickerField extends SingleSelectField
             return null;
         }
 
+        /** @var DataObject */
         $singleton = singleton($dataClass);
+        if (!$singleton->canCreate()) {
+            return null;
+        }
         return $singleton->getCMSEditLink();
     }
 
