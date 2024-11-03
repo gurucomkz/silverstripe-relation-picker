@@ -1,12 +1,11 @@
 <?php
 
-namespace Gurucomkz;
+namespace Gurucomkz\RelPickerField;
 
 use Exception;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\SingleLookupField;
 use SilverStripe\Forms\SingleSelectField;
@@ -15,10 +14,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectInterface;
-use SilverStripe\ORM\Relation;
-use SilverStripe\ORM\SS_List;
 use SilverStripe\View\ArrayData;
-use Tangible\Forms\PrettyLiteralField;
 
 /**
  * Provides a tagging interface, storing links between tag DataObjects and a parent DataObject.
