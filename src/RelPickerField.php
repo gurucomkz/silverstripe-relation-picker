@@ -430,7 +430,7 @@ class RelPickerField extends SingleSelectField
         $query = $source->dataQuery()
             ->query()
             ->addWhere([
-                'CONCAT_WS(\' \',"'.implode('","', $fields).'") LIKE ?' => '%'.str_replace(' ', '%', trim($term)).'%'
+                'CONCAT_WS(\' \',"'.implode('","', $fields).'") LIKE ?' => '%'.str_replace(' ', '%', trim($term ?? '')).'%'
             ])
             ->addOrderBy('ID', 'DESC')
             ->setLimit($this->getLazyLoadItemLimit())
@@ -440,7 +440,8 @@ class RelPickerField extends SingleSelectField
         $mkTitle = function ($entry) use ($fields) {
             $r = [];
             foreach ($fields as $f) {
-                if ($v = trim($entry[$f])) {
+                $v = trim($entry[$f] ?? '');
+                if (!empty($v)) {
                     $r[] = $v;
                 }
             }

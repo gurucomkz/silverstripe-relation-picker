@@ -1,2 +1,2 @@
-require('legacy/entwine/RelPickerField.js');
-require('boot');
+import 'legacy/entwine/RelPickerField';
+import 'boot';

@@ -1,10 +1,12 @@
 /* global window */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { loadComponent } from 'lib/Injector';
 
 window.jQuery.entwine('ss', ($) => {
   $('.js-injector-boot .ss-relpicker-field.entwine').entwine({
+    ReactRoot: null,
+
     onmatch() {
       const cmsContent = this.closest('.cms-content').attr('id');
       const context = (cmsContent)
@@ -18,17 +20,47 @@ window.jQuery.entwine('ss', ($) => {
         }
       };
 
-      ReactDOM.render(
+      let root = this.getReactRoot();
+      if (!root) {
+        root = createRoot(this[0]);
+        this.setReactRoot(root);
+      }
+      root.render(
         <RelPickerField
           noHolder
           {...dataSchema}
-        />,
-        this[0]
+        />
       );
     },
 
     onunmatch() {
-      ReactDOM.unmountComponentAtNode(this[0]);
+      const root = this.getReactRoot();
+      if (root) {
+        root.unmount();
+        this.setReactRoot(null);
+      }
+    }
+  });
+
+  $('.cms-edit-form').entwine({
+    getChangeTrackerOptions() {
+      // Figure out if we're still returning the default value
+      const isDefault = (this.entwineData('ChangeTrackerOptions') === undefined);
+      // Get the current options
+      let opts = this._super();
+
+      if (isDefault) {
+        // If it is the default then...
+        // clone the object (so we don't modify the original),
+        opts = $.extend({}, opts);
+        // modify it,
+        opts.ignoreFieldSelector += ', .ss-relpicker-field .no-change-track :input';
+        // then set the clone as the value on this element
+        // (so next call to this method gets this same clone)
+        this.setChangeTrackerOptions(opts);
+      }
+
+      return opts;
     }
   });
 });
